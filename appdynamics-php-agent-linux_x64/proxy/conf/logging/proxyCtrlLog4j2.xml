@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="2">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ABSOLUTE} %5p [%t] %c{1} - %m%n"/>
+            <LevelRangeFilter minLevel="INFO" maxLevel="FATAL" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+        <ADRRAFAppender name="ProxyLogger" fileName="proxyCore.log">
+            <PatternLayout pattern="[%t] %d{DATE} %5p %c - %m%n" />
+            <SizeBasedTriggeringPolicy size="20 MB" />
+            <ADRolloverStrategy max="5" />
+        </ADRRAFAppender>
+    </Appenders>
+    <Loggers>
+        <AsyncLogger name="com.singularity.proxyControl" level="info" additivity="false">
+            <AppenderRef ref="ProxyLogger"/>
+            <AppenderRef ref="Console"/>
+        </AsyncLogger>
+        <Root level="error">
+            <AppenderRef ref="ProxyLogger"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
