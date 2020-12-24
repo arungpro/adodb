@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.0-apache
 
 ENV DOWNLOAD_URL https://master.dl.sourceforge.net/project/quexf/quexf/quexf-1.20.7/quexf-1.20.7.zip
 
@@ -36,12 +36,15 @@ RUN set -x; \
     chown -R www-data:www-data /var/www/html
 
 #use ADODB
-RUN set -x \
-	&& curl -o adodb.tar.gz -fSL "https://github.com/ADOdb/ADOdb/archive/master.tar.gz" \
-	&& tar -xzf adodb.tar.gz -C /usr/src/ \
-	&& rm adodb.tar.gz \
-	&& mkdir /usr/share/php \
-	&& mv /usr/src/ADOdb-master /usr/share/php/adodb
+# RUN set -x \
+# 	&& curl -o adodb.tar.gz -fSL "https://github.com/ADOdb/ADOdb/archive/master.tar.gz" \
+# 	&& tar -xzf adodb.tar.gz -C /usr/src/ \
+# 	&& rm adodb.tar.gz \
+# 	&& mkdir /usr/share/php \
+# 	&& mv /usr/src/ADOdb-master /usr/share/php/adodb
+
+RUN mkdir -p /usr/share/php
+COPY adodb /usr/share/php/adodb
 
 #Set PHP defaults for queXS (allow bigger uploads for sample files)
 RUN { \
@@ -60,6 +63,7 @@ RUN { \
 COPY adodb_check.php /var/www/html
 COPY mysqli_check.php /var/www/html
 COPY ms.php /var/www/html
+COPY mswithoutp.php /var/www/html
 
 
 # install AppDynamics PHP Agent

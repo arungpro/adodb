@@ -1,5 +1,5 @@
 <?php
-$mysqli = mysqli_connect("p:mysql", "root", "password", "mydb");
+$mysqli = mysqli_connect("mysql", "root", "password", "mydb");
 
 /* check connection */
 if (mysqli_connect_errno()) {
@@ -14,24 +14,24 @@ if ($result = $mysqli->query("SELECT DATABASE()")) {
     $result->close();
 }
 
-$createQuery = "CREATE TABLE IF NOT EXISTS employeestest(id int(11) NOT NULL auto_increment, empid varchar(250)  NOT NULL default '', PRIMARY KEY(id))";
+$createQuery = "CREATE TABLE IF NOT EXISTS employees(id int(11) NOT NULL auto_increment, empid varchar(250)  NOT NULL default '', PRIMARY KEY(id))";
 
 $mysqli->query($createQuery);
 
 
 for ($i=0; $i < 5000; $i++) {
     printf("Default database is {$i}.\n");
-    $mysqli->query("INSERT INTO employeestest(empid) values('my')");
+    $mysqli->query("INSERT INTO employees(empid) values('my')");
 }
 
-$mysqli->query("INSERT INTO employeestest(empid) values('NO')");
+$mysqli->query("INSERT INTO employees(empid) values('NO')");
 
 for ($i=0; $i < 5000; $i++) {
   printf("Default database is {$i}.\n");
-  $mysqli->query("INSERT INTO employeestest(empid) values('my')");
+  $mysqli->query("INSERT INTO employees(empid) values('my')");
 }
 
-if ($result = $mysqli->query("SELECT * FROM employeestest where empid='NO'")) {
+if ($result = $mysqli->query("SELECT * FROM employees where empid='NO'")) {
     while ($row = $result->fetch_row()) {
       printf ("%s (%s)\n", $row[0], $row[1]);
     }
@@ -39,7 +39,7 @@ if ($result = $mysqli->query("SELECT * FROM employeestest where empid='NO'")) {
   }
 
 /* drop table */
-$mysqli->query("DROP TABLE employeestest");
+$mysqli->query("DROP TABLE employees");
 
 $mysqli->close();
 ?>
