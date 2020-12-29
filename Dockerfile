@@ -58,20 +58,24 @@ RUN { \
 
 # COPY docker-entrypoint.sh /usr/local/bin/
 # RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
-
+# while true; do sleep 1; curl http://localhost:8080/ms.php ; echo -e ‘\n\n\n\n’$(date);done
 # Add code
 COPY adodb_check.php /var/www/html
+COPY adodb_conn_close.php /var/www/html
 COPY mysqli_check.php /var/www/html
-COPY ms.php /var/www/html
-COPY mswithoutp.php /var/www/html
 
+
+COPY setup.php /var/www/html
+COPY mysqli_query.php /var/www/html
+COPY mysqli_query_store_result.php /var/www/html
+COPY mysqli_query_use_result.php /var/www/html
 
 # install AppDynamics PHP Agent
 RUN mkdir myspace
 COPY . /myspace
 ENV APP_AGENT_HOME /myspace/appdynamics-php-agent-linux_x64
 RUN /bin/bash -c 'ls -la ${APP_AGENT_HOME}/logs; chmod -R 777 ${APP_AGENT_HOME}; chown -R root: ${APP_AGENT_HOME}/logs;ls -la ${APP_AGENT_HOME}/logs'
-RUN ${APP_AGENT_HOME}/install.sh -s -a=e2e-customer@7a15fef0-c685-47ed-9bc3-3db885018363 master-saas-controller.e2e.appd-test.com 443 php_adodb adodb proc1
+RUN ${APP_AGENT_HOME}/install.sh -s -a=e2e-customer@7a15fef0-c685-47ed-9bc3-3db885018363 master-saas-controller.e2e.appd-test.com 443 php_try2_adodb adodb_try2 proc1
 #RUN cp /etc/php/7.1/cli/conf.d/appdynamics_agent.ini /etc/php/7.1/apache2/conf.d/appdynamics_agent.ini
 
 # ENTRYPOINT resets CMD
